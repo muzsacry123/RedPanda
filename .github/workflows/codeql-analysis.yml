@@ -1,77 +1,173 @@
-name: "CodeQL Multi-language Scan"
+name: "CodeQL Multi-language Analysis"
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 permissions:
   security-events: read
 
 jobs:
-  analyze:
-    name: Analyze
+  python:
+    name: Python CodeQL
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        language: [ 'python', 'cpp', 'java' ]
+    timeout-minutes: 60
+    if: contains(join(github.event.head_commit.message, ' '), '') # 自动跳过空仓库时可改进逻辑
     steps:
-      # 1️⃣ 检出代码
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ 初始化 CodeQL
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          languages: ${{ matrix.language }}
+          python-version: '3.x'
 
-      # 3️⃣ C/C++ 特殊处理：构建生成数据库
-      - name: Build C/C++ project
-        if: matrix.language == 'cpp'
-        run: |
-          mkdir -p build
-          cd build
-          cmake ..
-          cmake --build .
-        shell: bash
-
-      # 4️⃣ Java 项目
-      - name: Build Java/Kotlin project
-        if: matrix.language == 'java'
-        run: |
-          if [ -f "./gradlew" ]; then
-            echo "Detected Gradle project, building..."
-            chmod +x ./gradlew
-            ./gradlew build
-          elif [ -f "pom.xml" ]; then
-            echo "Detected Maven project, building..."
-            mvn clean package
-          else
-            echo "No build tool detected. Skipping build."
-          fi
-
-      # 5️⃣ Python 依赖安装
       - name: Cache Python dependencies
-        if: matrix.language == 'python'
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Install Python dependencies
-        if: matrix.language == 'python'
-        run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          if [ -f "requirements.txt" ]; then
+            pip install -r requirements.txt
+          else
+            echo "No requirements.txt, skipping install"
 
-      # 6️⃣ Autobuild placeholder for languages without build step
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: python
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v4
+        with:
+          build-command: 'echo "Python, no build needed"'
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+
+  java:
+    name: Java/Kotlin CodeQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: java
+
+      - name: Build Java/Kotlin
+        run: |
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            ./gradlew build
+          elif [ -f "pom.xml" ]; then
+            mvn clean package
+          else
+            echo "No Java build tool detected. Skipping build"
+
       - name: Autobuild placeholder
         uses: github/codeql-action/autobuild@v4
         with:
-          build-command: 'echo "No build needed"'
+          build-command: 'echo "No extra build needed"'
 
-      # 7️⃣ 执行 CodeQL 分析
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+
+  cpp:
+    name: C/C++ CodeQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: cpp
+
+      - name: Build C/C++
+        run: |
+          if [ -f "CMakeLists.txt" ]; then
+            mkdir -p build
+            cd build
+            cmake ..
+            cmake --build .
+          elif [ -f "Makefile" ]; then
+            make
+          else
+            echo "No C/C++ build tool detected. Skipping build"
+
+      - name: Autobuild placeholder
+        uses: github/codeql-action/autobuild@v4
+        with:
+          build-command: 'echo "No extra build needed"'
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+
+  csharp:
+    name: C# CodeQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: csharp
+
+      - name: Build C#
+        run: |
+          if ls *.csproj 1> /dev/null 2>&1; then
+            dotnet build
+          else
+            echo "No C# project files found, skipping build"
+
+      - name: Autobuild placeholder
+        uses: github/codeql-action/autobuild@v4
+        with:
+          build-command: 'echo "No extra build needed"'
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+
+  javascript:
+    name: JavaScript/TypeScript CodeQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: javascript
+
+      - name: Build JS/TS (npm install)
+        run: |
+          if [ -f "package.json" ]; then
+            npm install
+          else
+            echo "No package.json found, skipping npm install"
+
+      - name: Autobuild placeholder
+        uses: github/codeql-action/autobuild@v4
+        with:
+          build-command: 'echo "No extra build needed"'
+
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
