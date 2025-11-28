@@ -1,0 +1,10 @@
+# This file is used internally by FFMPEG.
+file 'file:E:/Github/manim/media/videos/test/480p15/partial_movie_files/CRY/1185818338_123554531_631829896.mp4'
+file 'file:E:/Github/manim/media/videos/test/480p15/partial_movie_files/CRY/1185818338_3610705155_4131132508.mp4'
+file 'file:E:/Github/manim/media/videos/test/480p15/partial_movie_files/CRY/624642324_2868009635_3104952253.mp4'
+file 'file:E:/Github/manim/media/videos/test/480p15/partial_movie_files/CRY/624642324_2714170910_2656456505.mp4'
+file 'file:E:/Github/manim/media/videos/test/480p15/partial_movie_files/CRY/624642324_3479614997_343690618.mp4'
+file 'file:E:/Github/manim/media/videos/test/480p15/partial_movie_files/CRY/624642324_1890985145_1418291296.mp4'
+file 'file:E:/Github/manim/media/videos/test/480p15/partial_movie_files/CRY/624642324_3540872870_906532424.mp4'
+file 'file:E:/Github/manim/media/videos/test/480p15/partial_movie_files/CRY/624642324_1704852926_1552271468.mp4'
+file 'file:E:/Github/manim/media/videos/test/480p15/partial_movie_files/CRY/624642324_105146077_4168094946.mp4'

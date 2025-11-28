@@ -1,0 +1,8 @@
+# This file is used internally by FFMPEG.
+file 'file:E:/Github/manim/media/videos/test/1080p60/partial_movie_files/Font2/450974505_4103565438_223132457.mp4'
+file 'file:E:/Github/manim/media/videos/test/1080p60/partial_movie_files/Font2/34786186_1226004967_1319611491.mp4'
+file 'file:E:/Github/manim/media/videos/test/1080p60/partial_movie_files/Font2/34786186_645682970_4289928979.mp4'
+file 'file:E:/Github/manim/media/videos/test/1080p60/partial_movie_files/Font2/34786186_387718638_1364967582.mp4'
+file 'file:E:/Github/manim/media/videos/test/1080p60/partial_movie_files/Font2/34786186_742136613_3425012658.mp4'
+file 'file:E:/Github/manim/media/videos/test/1080p60/partial_movie_files/Font2/34786186_125286499_268769995.mp4'
+file 'file:E:/Github/manim/media/videos/test/1080p60/partial_movie_files/Font2/34786186_1134648881_4121291445.mp4'
