@@ -61,20 +61,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check if Java code exists
+        id: check_java
+        run: |
+          if ls **/*.java 1> /dev/null 2>&1; then
+            echo "java_present=true" >> $GITHUB_ENV
+          else
+            echo "java_present=false" >> $GITHUB_ENV
+          fi
+      
+      - name: Skip if no Java code
+        if: env.java_present == 'false'
+        run: |
+          echo "No Java code found, skipping job."
+          exit 0
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
           languages: java
 
-      - name: Build Java/Kotlin
+      - name: Build Java project
         run: |
-          if [ -f "./gradlew" ]; then
-            chmod +x ./gradlew
-            ./gradlew build
-          elif [ -f "pom.xml" ]; then
+          if [ -f "pom.xml" ]; then
             mvn clean package
+          elif [ -f "build.gradle" ]; then
+            ./gradlew build
           else
-            echo "No Java build tool detected. Skipping build"
+            echo "No Java build tool found, skipping build"
           fi
 
       - name: Perform CodeQL Analysis
@@ -87,6 +101,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Check if C/C++ code exists
+        id: check_cpp
+        run: |
+          if ls **/*.c **/*.cpp 1> /dev/null 2>&1; then
+            echo "cpp_present=true" >> $GITHUB_ENV
+          else
+            echo "cpp_present=false" >> $GITHUB_ENV
+          fi
+  
+      - name: Skip if no C/C++ code
+        if: env.cpp_present == 'false'
+        run: |
+          echo "No C/C++ code found, skipping job."
+          exit 0
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
@@ -116,6 +145,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Skip if no C# code
+        run: |
+          if ! ls **/*.csproj 1> /dev/null 2>&1 && ! ls **/*.cs 1> /dev/null 2>&1; then
+            echo "No C# code found, skipping CodeQL analysis"
+            exit 0
+          fi
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
