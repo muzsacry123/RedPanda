@@ -171,10 +171,17 @@ jobs:
       - name: Build C# projects
         run: |
           shopt -s globstar
+          found=false
           for proj in **/*.csproj; do
-            echo "Building $proj"
-            dotnet build "$proj"
+            if [ -f "$proj" ]; then
+              echo "Building $proj"
+              dotnet build "$proj"
+              found=true
+            fi
           done
+          if [ "$found" = false ]; then
+            echo "No .csproj files found, skipping build"
+          fi
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
