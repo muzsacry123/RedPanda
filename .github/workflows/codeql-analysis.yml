@@ -198,6 +198,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check if JS/TS code exists
+        id: check_js
+        run: |
+          shopt -s globstar
+          if compgen -G "**/*.js" > /dev/null || compgen -G "**/*.ts" > /dev/null; then
+            echo "js_present=true" >> $GITHUB_ENV
+          else
+            echo "js_present=false" >> $GITHUB_ENV
+          fi
+
+      - name: Skip if no JS/TS code
+        if: env.js_present == 'false'
+        run: |
+          echo "No JavaScript or TypeScript code found, skipping CodeQL analysis"
+          exit 0
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
