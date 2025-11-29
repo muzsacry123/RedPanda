@@ -50,7 +50,6 @@ jobs:
         run: |
           wget -q https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.15.0/checkstyle-10.15.0-all.jar -O checkstyle.jar
           wget -q https://raw.githubusercontent.com/checkstyle/checkstyle/master/src/main/resources/google_checks.xml
-          cd java
           java -jar checkstyle.jar -c google_checks.xml java/
 
       ########## JS / TS Lint ##########
