@@ -66,24 +66,30 @@ jobs:
         with:
           languages: java
 
-      - name: Build all Java Gradle projects
-        if: env.present == 'true'
-        run: |
-          shopt -s globstar
-          found=false
-          for gradle_file in java/**/build.gradle java/**/build.gradle.kts; do
-            if [ -f "$gradle_file" ]; then
-              echo "Found Gradle project: $gradle_file"
-              project_dir=$(dirname "$gradle_file")
-              echo "Building $project_dir"
-              (cd "$project_dir" && ./gradlew build || true)
-              found=true
-            fi
-          done
-
-          if [ "$found" = false ]; then
-            echo "No Gradle projects were found. Skipping Java build."
-          fi
+      - name: Autobuild all Java subprojects
+        uses: github/codeql-action/autobuild@v4
+        with:
+          build-command: |
+            shopt -s globstar
+            for proj in java/*/app; do
+              # 检查目录下是否有 Java 文件
+              if compgen -G "$proj/**/*.java" > /dev/null; then
+                echo "Building project at $proj"
+                cd "$proj"
+                # 如果是 Gradle Kotlin DSL
+                if [ -f "build.gradle.kts" ]; then
+                  ./gradlew build || echo "Build failed for $proj, skipping"
+                # 如果是普通 Gradle
+                elif [ -f "build.gradle" ]; then
+                  ./gradlew build || echo "Build failed for $proj, skipping"
+                else
+                  echo "No recognized build file in $proj, skipping"
+                fi
+                cd - >/dev/null
+              else
+                echo "No Java files in $proj, skipping"
+              fi
+            done
 
       - name: Perform CodeQL Analysis
         if: env.present == 'true'
