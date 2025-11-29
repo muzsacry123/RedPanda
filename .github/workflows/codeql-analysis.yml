@@ -67,6 +67,7 @@ jobs:
           languages: java
 
       - name: Autobuild all Java subprojects
+        if: env.present == 'true'
         uses: github/codeql-action/autobuild@v4
         with:
           build-command: |
