@@ -93,7 +93,7 @@ jobs:
         with:
           output: results-machine_learning.sarif
           category: python_machine_learning
-          paths: ${{ env.changed }}
+          paths: ${{ env.changed_files }}
           upload: false
 
       - name: Upload machine_learning results
@@ -134,7 +134,7 @@ jobs:
         with:
           output: results-manim.sarif
           category: python_manim
-          paths: ${{ env.changed }}
+          paths: ${{ env.changed_files }}
           upload: false
 
       - name: Upload manim results
@@ -233,7 +233,7 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           output: results-java.sarif
-          paths: ${{ env.changed }}
+          paths: ${{ env.changed_files }}
           upload: false
       - name: Upload CodeQL results
         if: ${{ env.present == 'true' && env.actual_changes == 'true' }}
@@ -310,7 +310,7 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           output: results-cpp.sarif
-          paths: ${{ env.changed }}
+          paths: ${{ env.changed_files }}
           upload: false
       - name: Upload CodeQL results
         if: ${{ env.present == 'true' && env.actual_changes == 'true' }}
@@ -382,7 +382,7 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           output: results-csharp.sarif
-          paths: ${{ env.changed }}
+          paths: ${{ env.changed_files }}
           upload: false
       - name: Upload CodeQL results
         if: ${{ env.present == 'true' && env.actual_changes == 'true' }}
@@ -454,7 +454,7 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           output: results-js.sarif
-          paths: ${{ env.changed }}
+          paths: ${{ env.changed_files }}
           upload: false
       - name: Upload CodeQL results
         if: ${{ env.present == 'true' && env.actual_changes == 'true' }}
