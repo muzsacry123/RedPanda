@@ -30,11 +30,13 @@ jobs:
         if: env.present == 'true'
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
       
       - name: Install system dependencies
         if: env.present == 'true'
-        run: sudo apt-get update && sudo apt-get install -y libcairo2-dev libgirepository1.0-dev gir1.2-pango-1.0 python3-gi-cairo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcairo2-dev libpango1.0-dev
 
       - name: Initialize CodeQL
         if: env.present == 'true'
@@ -80,11 +82,32 @@ jobs:
         if: env.present == 'true'
         run: |
           shopt -s globstar
-          for proj in java/**/build.gradle.kts; do
-            dir=$(dirname "$proj")
-            echo "Building Java project in $dir"
-            (cd "$dir" && ./gradlew build)
+          found_build=false
+          for dir in java/*; do
+            if [ -f "$dir/gradlew" ]; then
+              echo "Building Java project in $dir using gradlew"
+              cd "$dir"
+              chmod +x ./gradlew
+              ./gradlew build
+              cd -
+              found_build=true
+            elif [ -f "$dir/build.gradle" ]; then
+              echo "Building Java project in $dir using gradle wrapper"
+              cd "$dir"
+              gradle build
+              cd -
+              found_build=true
+            elif [ -f "$dir/build.gradle.kts" ]; then
+              echo "Building Java project in $dir using gradle wrapper (Kotlin DSL)"
+              cd "$dir"
+              gradle build
+              cd -
+              found_build=true
+            fi
           done
+          if [ "$found_build" = false ]; then
+            echo "No Java build tool found in any subdirectory, skipping build"
+          fi
 
       - name: Perform CodeQL Analysis
         if: env.present == 'true'
