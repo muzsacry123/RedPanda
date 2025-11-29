@@ -44,6 +44,11 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: 'python_machine_learning'
+          output: results-python_machine_learning.sarif
+      - name: Upload CodeQL results
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: results-python_machine_learning.sarif
 
   Python_manim:
     name: Python Manim
@@ -83,6 +88,11 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: 'python_manim'
+          output: results-python_manim.sarif
+      - name: Upload CodeQL results
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: results-python_manim.sarif
 
   java:
     name: Java/Kotlin CodeQL
@@ -141,6 +151,12 @@ jobs:
       - name: Perform CodeQL Analysis
         if: env.present == 'true'
         uses: github/codeql-action/analyze@v4
+        with:
+          output: results-java.sarif
+      - name: Upload CodeQL results
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: results-java.sarif
 
   cpp:
     name: C/C++ CodeQL
@@ -179,6 +195,12 @@ jobs:
       - name: Perform CodeQL Analysis
         if: env.present == 'true'
         uses: github/codeql-action/analyze@v4
+        with:
+          output: results-cpp.sarif
+      - name: Upload CodeQL results
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: results-cpp.sarif
 
   csharp:
     name: C# CodeQL
@@ -212,6 +234,12 @@ jobs:
       - name: Perform CodeQL Analysis
         if: env.present == 'true'
         uses: github/codeql-action/analyze@v4
+        with:
+          output: results-csharp.sarif
+      - name: Upload CodeQL results
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: results-csharp.sarif
 
   javascript:
     name: JavaScript/TypeScript CodeQL
@@ -245,3 +273,9 @@ jobs:
       - name: Perform CodeQL Analysis
         if: env.present == 'true'
         uses: github/codeql-action/analyze@v4
+        with:
+          output: results-js.sarif
+      - name: Upload CodeQL results
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: results-js.sarif
