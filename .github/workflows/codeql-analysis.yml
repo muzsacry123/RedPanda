@@ -46,6 +46,7 @@ jobs:
           category: 'python_machine_learning'
           output: results-python_machine_learning.sarif
       - name: Upload CodeQL results
+        if: env.present == 'true'
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results-python_machine_learning.sarif
@@ -90,6 +91,7 @@ jobs:
           category: 'python_manim'
           output: results-python_manim.sarif
       - name: Upload CodeQL results
+        if: env.present == 'true'
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results-python_manim.sarif
@@ -154,6 +156,7 @@ jobs:
         with:
           output: results-java.sarif
       - name: Upload CodeQL results
+        if: env.present == 'true'
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results-java.sarif
@@ -198,6 +201,7 @@ jobs:
         with:
           output: results-cpp.sarif
       - name: Upload CodeQL results
+        if: env.present == 'true'
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results-cpp.sarif
@@ -237,6 +241,7 @@ jobs:
         with:
           output: results-csharp.sarif
       - name: Upload CodeQL results
+        if: env.present == 'true'
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results-csharp.sarif
@@ -276,6 +281,7 @@ jobs:
         with:
           output: results-js.sarif
       - name: Upload CodeQL results
+        if: env.present == 'true'
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results-js.sarif
