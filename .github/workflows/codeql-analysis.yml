@@ -95,7 +95,7 @@ jobs:
         run: |
           if [ -f "pom.xml" ]; then
             mvn clean package
-          elif [ -f "build.gradle" ]; then
+          elif [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
             ./gradlew build
           else
             echo "No Java build tool found, skipping build"
