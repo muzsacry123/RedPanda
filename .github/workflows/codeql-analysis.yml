@@ -144,13 +144,13 @@ jobs:
           echo "changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | tr '\n' ' ')" >> $GITHUB_ENV
 
       - name: Initialize CodeQL
-        if: ${{ ${{ env.present == 'true' && env.changed_files != '' }} && env.changed_files != '' }}
+        if: ${{ env.present == 'true' && env.changed_files != '' }}
         uses: github/codeql-action/init@v4
         with:
           languages: java
 
       - name: Build all Java subprojects
-        if: ${{ ${{ env.present == 'true' && env.changed_files != '' }} && env.changed_files != '' }}
+        if: ${{ env.present == 'true' && env.changed_files != '' }}
         run: |
           shopt -s globstar
           found_build=false
