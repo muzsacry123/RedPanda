@@ -25,7 +25,9 @@ jobs:
             echo "present=false" >> $GITHUB_ENV
           fi
 
-      - uses: github/codeql-action/init@v4
+      - name: Initialize CodeQL
+        if: env.present == 'true'
+        uses: github/codeql-action/init@v4
         with:
           languages: python
 
@@ -100,7 +102,9 @@ jobs:
             echo "present=false" >> $GITHUB_ENV
           fi
 
-      - uses: github/codeql-action/init@v4
+      - name: Initialize CodeQL
+        if: env.present == 'true'
+        uses: github/codeql-action/init@v4
         with:
           languages: cpp
 
@@ -135,7 +139,9 @@ jobs:
             echo "present=false" >> $GITHUB_ENV
           fi
 
-      - uses: github/codeql-action/init@v4
+      - name: Initialize CodeQL
+        if: env.present == 'true'
+        uses: github/codeql-action/init@v4
         with:
           languages: csharp
 
@@ -165,7 +171,9 @@ jobs:
             echo "present=false" >> $GITHUB_ENV
           fi
 
-      - uses: github/codeql-action/init@v4
+      - name: Initialize CodeQL
+        if: env.present == 'true'
+        uses: github/codeql-action/init@v4
         with:
           languages: javascript
 
